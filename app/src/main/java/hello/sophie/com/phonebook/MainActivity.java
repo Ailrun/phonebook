@@ -1,5 +1,6 @@
 package hello.sophie.com.phonebook;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,8 +16,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
     private ListView listview;
-    private EditText editText;
-    private Button button;
+    private Button buttonInsert;
 
     private ArrayAdapter<String> adapter;
     private ArrayList<String> list;
@@ -27,19 +27,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         listview = (ListView) findViewById(R.id.main_listview);
-        editText = (EditText) findViewById(R.id.main_edittext);
-        button = (Button) findViewById(R.id.main_button);
-        button.setOnClickListener(this);
+        buttonInsert = (Button) findViewById(R.id.main_button);
+        buttonInsert.setOnClickListener(this);
 
         //listview adapter arrayList
         //http://blog.naver.com/aro004/80203876954
 
-        list = new ArrayList<String>();
+        /* list = new ArrayList<String>();
         list.add("우정");
         list.add("광");
-        list.add("kyu");
+        list.add("kyu"); */
 
         //this: 현재 액티비티
+        list = new ArrayList<String>();
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         listview.setAdapter(adapter);
     }
@@ -50,10 +50,23 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         switch (id) {
             case R.id.main_button :
-                String input = editText.getText().toString();
+                /*String input = editText.getText().toString();
                 list.add(input);
-                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();*/
+                Intent intent = new Intent(MainActivity.this, InsertActivity.class);
+                startActivityForResult(intent, 1061);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1061 && resultCode == 412) {
+            String str = data.getStringExtra("data");
+            list.add(str);
+            adapter.notifyDataSetChanged();
         }
     }
 
