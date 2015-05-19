@@ -11,6 +11,8 @@ import android.widget.EditText;
  * Created by SophiesMac on 15. 5. 19..
  */
 public class InsertActivity extends Activity implements View.OnClickListener {
+    private final int RESULT_SEARCH = 1110;//중복이 맘에 안들어..
+
     private EditText name;
     private EditText phone;
     private Button buttonSubmit;
@@ -36,8 +38,9 @@ public class InsertActivity extends Activity implements View.OnClickListener {
                 String phoneStr = phone.getText().toString();
 
                 Intent intent = getIntent();
-                intent.putExtra("data", nameStr + "/" + phoneStr);
-                setResult(412, intent);
+                intent.putExtra("name", nameStr);
+                intent.putExtra("phone", phoneStr);
+                setResult(RESULT_SEARCH, intent);
                 finish();
                 break;
         }

@@ -9,11 +9,11 @@
         android:orientation="horizontal">
         <TextView
             android:text="name: "
-            android:layout_width="40dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/insert_name"
-            android:layout_width="70dp"
+            android:layout_width="170dp"
             android:layout_height="wrap_content" />
         </LinearLayout>
 
@@ -23,11 +23,11 @@
         android:orientation="horizontal">
         <TextView
             android:text="phone: "
-            android:layout_width="40dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/insert_phonenumber"
-            android:layout_width="70dp"
+            android:layout_width="170dp"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
