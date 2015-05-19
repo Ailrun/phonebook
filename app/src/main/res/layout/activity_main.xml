@@ -4,6 +4,11 @@
     tools:context=".MainActivity"
     >
 
+    <SearchView
+        android:id="@+id/main_searchview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/main_button"
         android:layout_width="100dp"

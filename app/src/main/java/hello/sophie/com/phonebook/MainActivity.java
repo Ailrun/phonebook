@@ -3,6 +3,7 @@ package hello.sophie.com.phonebook;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,16 +11,47 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener {
+public class MainActivity extends ActionBarActivity
+        implements View.OnClickListener, SearchView.OnQueryTextListener {
     private ListView listview;
     private Button buttonInsert;
+    private SearchView searchView;
 
+    private boolean isAfterSearch;
+
+    //origianl
     private ArrayAdapter<String> adapter;
     private ArrayList<String> list;
+
+    //tmp searched
+    private ArrayList<String> list_searched;
+    private ArrayAdapter<String> adapter_searched;
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        list_searched = new ArrayList<>();
+        for(int i=0; i<list.size(); i++){
+            if (list.get(i).contains(query)){
+                //Toast.makeText(this, list.get(i), Toast.LENGTH_SHORT).show();
+                list_searched.add(list.get(i));
+            }
+        }
+        adapter_searched = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list_searched);
+        listview.setAdapter(adapter_searched);
+        isAfterSearch = true;
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,18 +60,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         listview = (ListView) findViewById(R.id.main_listview);
         buttonInsert = (Button) findViewById(R.id.main_button);
+        searchView = (SearchView) findViewById(R.id.main_searchview);
         buttonInsert.setOnClickListener(this);
+        searchView.setOnQueryTextListener(this);
+
+        isAfterSearch = false;
 
         //listview adapter arrayList
         //http://blog.naver.com/aro004/80203876954
 
-        /* list = new ArrayList<String>();
-        list.add("우정");
-        list.add("광");
-        list.add("kyu"); */
+        list = new ArrayList<String>();
+        list.add("aabbcc");
+        list.add("aaaa");
+        list.add("xxxx");
+        list.add("kyu");
 
         //this: 현재 액티비티
-        list = new ArrayList<String>();
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         listview.setAdapter(adapter);
     }
@@ -56,6 +92,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 Intent intent = new Intent(MainActivity.this, InsertActivity.class);
                 startActivityForResult(intent, 1061);
                 break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isAfterSearch == true) {
+            listview.setAdapter(adapter);
+            isAfterSearch = false;
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -91,4 +137,5 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         return super.onOptionsItemSelected(item);
     }
+
 }
