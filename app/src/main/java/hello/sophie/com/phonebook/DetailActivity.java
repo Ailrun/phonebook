@@ -2,6 +2,7 @@ package hello.sophie.com.phonebook;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,7 @@ import java.util.List;
 public class DetailActivity extends Activity implements View.OnClickListener{
     private TextView name;
     private TextView phone;
+    private String phoneStr;
     private Button buttonCall;
     private Button buttonDelete;
     private List<Person> list;
@@ -40,6 +42,7 @@ public class DetailActivity extends Activity implements View.OnClickListener{
         pos = bundle.getInt("pos");
         Toast.makeText(this, "pos: "+pos,Toast.LENGTH_LONG).show();
         Person person= this.list.get(pos);
+        phoneStr = person.getPhone();
         name.setText(person.getName());
         phone.setText(person.getPhone());
 
@@ -53,6 +56,7 @@ public class DetailActivity extends Activity implements View.OnClickListener{
             case R.id.call_button :
                 Toast.makeText(this,"call",Toast.LENGTH_SHORT).show();
                 //todo 해당번호 전화앱 켜기
+                call(phoneStr);
                 //Intent intent = new Intent(MainActivity.this, InsertActivity.class);
                 //startActivityForResult(intent, REQUEST_SEARCH);
                 break;
@@ -63,5 +67,11 @@ public class DetailActivity extends Activity implements View.OnClickListener{
                 finish();
                 break;
         }
+    }
+
+    public void call(String phoneStr) {
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + phoneStr));
+        startActivity(callIntent);
     }
 }
