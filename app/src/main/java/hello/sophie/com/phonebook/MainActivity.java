@@ -1,5 +1,6 @@
 package hello.sophie.com.phonebook;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -18,11 +19,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-
-public class MainActivity extends ActionBarActivity implements View.OnClickListener, SearchView.OnQueryTextListener {
+public class MainActivity extends Activity implements View.OnClickListener, SearchView.OnQueryTextListener {
     private final int REQUEST_SEARCH = 1111;
     private final int RESULT_SEARCH = 1110;
     private final int REQUEST_DETAIL = 2222;
+    private final int RESULT_DETAIL = 2220;
 
     private ListView listview;
     private Button buttonInsert;
@@ -92,7 +93,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             Bundle bundle = new Bundle();
             bundle.putInt("pos",position);
             intent.putExtras(bundle);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_DETAIL);
         }
     }
 
@@ -131,6 +132,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             String phoneStr = data.getStringExtra("phone");
             list.add(new Person(nameStr, phoneStr));
             adapter.notifyDataSetChanged();
+        } else if (requestCode == REQUEST_DETAIL && resultCode == 2220){
+            //adapter.notifyDataSetChanged();//데이터 변경됨을 알림.
+            //listview.invalidate();// 다시 그리기
         }
     }
 

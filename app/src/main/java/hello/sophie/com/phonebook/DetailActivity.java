@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 /**
  * Created by SophiesMac on 15. 5. 20..
  */
@@ -17,6 +19,9 @@ public class DetailActivity extends Activity implements View.OnClickListener{
     private Button buttonCall;
     private Button buttonDelete;
     private List<Person> list;
+    private int pos=0;
+    private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,14 +32,14 @@ public class DetailActivity extends Activity implements View.OnClickListener{
         buttonCall = (Button) findViewById(R.id.call_button);
         buttonCall.setOnClickListener(this);
         buttonDelete = (Button) findViewById(R.id.delete_button);
-        //buttonDelete.setOnClickListener(this);
-        //this.list = MainActivity.list;
+        buttonDelete.setOnClickListener(this);
+        this.list = MainActivity.list;
 
-        Intent intent = getIntent();
+        intent = getIntent();
         Bundle bundle = intent.getExtras();
-        int pos = bundle.getInt("pos");
+        pos = bundle.getInt("pos");
         Toast.makeText(this, "pos: "+pos,Toast.LENGTH_LONG).show();
-        Person person= MainActivity.list.get(pos);
+        Person person= this.list.get(pos);
         name.setText(person.getName());
         phone.setText(person.getPhone());
 
@@ -46,11 +51,17 @@ public class DetailActivity extends Activity implements View.OnClickListener{
 
         switch (id) {
             case R.id.call_button :
+                Toast.makeText(this,"call",Toast.LENGTH_SHORT).show();
                 //todo 해당번호 전화앱 켜기
                 //Intent intent = new Intent(MainActivity.this, InsertActivity.class);
                 //startActivityForResult(intent, REQUEST_SEARCH);
                 break;
             case R.id.delete_button:
+                Toast.makeText(this,"delete",Toast.LENGTH_SHORT).show();
+                this.list.remove(pos);
+
+                setResult(2220, intent);
+                finish();
                 break;
         }
     }
