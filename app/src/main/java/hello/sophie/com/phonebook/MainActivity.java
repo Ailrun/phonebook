@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, SearchView.OnQueryTextListener {
     private final int REQUEST_SEARCH = 1111;
     private final int RESULT_SEARCH = 1110;
+    private final int REQUEST_DETAIL = 2222;
 
     private ListView listview;
     private Button buttonInsert;
@@ -29,7 +32,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     //origianl
     private ArrayAdapter<Person> adapter;
-    private ArrayList<Person> list;
+    public static ArrayList<Person> list;
 
     //tmp searched
     private ArrayList<Person> list_searched;
@@ -77,6 +80,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         //this: 현재 액티비티
         adapter = new ArrayAdapter<Person>(this, android.R.layout.simple_list_item_1, list);
         listview.setAdapter(adapter);
+        listview.setOnItemClickListener(new ListViewItemClickListener());
+    }
+
+    private class ListViewItemClickListener implements AdapterView.OnItemClickListener{
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            //Toast.makeText(MainActivity.this, id +", "+position, Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("pos",position);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -88,9 +105,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 Intent intent = new Intent(MainActivity.this, InsertActivity.class);
                 startActivityForResult(intent, REQUEST_SEARCH);
                 break;
-            //todo1: listView의 원소를 짧게 누르면, 상세페이지로 넘기기.
-            //todo 2: listView의 원소를 길게 누르면, 전화로 연결.
-            //todo 3: 왼쪽으로 슬라이드 하면, 팝업 후, 삭제.
+            //todo 1: listView의 원소를 짧게 누르면, 상세페이지로 넘기기.
+            //http://blog.naver.com/2hyoin/220352336443
+            //todo2: listView의 원소를 길게 누르면, 전화로 연결.
+            //todo 3: 왼쪽으로 슬라이드 or 길게누르면, (팝업 후,) 삭제.
         }
     }
 

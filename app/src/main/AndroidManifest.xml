@@ -22,6 +22,10 @@
             android:name=".InsertActivity"
             android:label="InsertActivity" >
         </activity>
+        <activity
+            android:name=".DetailActivity"
+            android:label="DetailActivity" >
+        </activity>
 
     </application>
 
