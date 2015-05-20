@@ -133,8 +133,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Sear
             list.add(new Person(nameStr, phoneStr));
             adapter.notifyDataSetChanged();
         } else if (requestCode == REQUEST_DETAIL && resultCode == 2220){
-            //adapter.notifyDataSetChanged();//데이터 변경됨을 알림.
-            //listview.invalidate();// 다시 그리기
+            adapter.notifyDataSetChanged();//데이터 변경됨을 알림.
+            listview.invalidate();// 다시 그리기
         }
     }
 

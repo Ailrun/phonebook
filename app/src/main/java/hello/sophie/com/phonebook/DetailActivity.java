@@ -59,7 +59,6 @@ public class DetailActivity extends Activity implements View.OnClickListener{
             case R.id.delete_button:
                 Toast.makeText(this,"delete",Toast.LENGTH_SHORT).show();
                 this.list.remove(pos);
-
                 setResult(2220, intent);
                 finish();
                 break;
