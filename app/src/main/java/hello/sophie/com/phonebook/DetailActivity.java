@@ -21,6 +21,7 @@ public class DetailActivity extends Activity implements View.OnClickListener{
     private Button buttonCall;
     private Button buttonDelete;
     private List<Person> list;
+    private List<Person> list_seasrched;
     private int pos=0;
     private Intent intent;
 
@@ -36,16 +37,25 @@ public class DetailActivity extends Activity implements View.OnClickListener{
         buttonDelete = (Button) findViewById(R.id.delete_button);
         buttonDelete.setOnClickListener(this);
         this.list = MainActivity.list;
+        this.list_seasrched = MainActivity.list_searched;
 
         intent = getIntent();
         Bundle bundle = intent.getExtras();
         pos = bundle.getInt("pos");
+
         Toast.makeText(this, "pos: "+pos,Toast.LENGTH_LONG).show();
-        Person person= this.list.get(pos);
+        //todo 검색중이면, list가 아니라 list_searched에서 가져오기.
+        boolean isSearching = bundle.getBoolean("isSearching");
+        Person person;
+        if(isSearching){
+            person = this.list_seasrched.get(pos);
+        }else{
+            person= this.list.get(pos);
+        }
+
         phoneStr = person.getPhone();
         name.setText(person.getName());
         phone.setText(person.getPhone());
-
     }
 
     @Override

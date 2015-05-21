@@ -2,20 +2,15 @@ package hello.sophie.com.phonebook;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,14 +24,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Sear
     private Button buttonInsert;
     private SearchView searchView;
 
-    private boolean isAfterSearch;
+    private boolean isSearching;
 
     //origianl
-    private ArrayAdapter<Person> adapter;
     public static ArrayList<Person> list;
+    private ArrayAdapter<Person> adapter;
 
     //tmp searched
-    private ArrayList<Person> list_searched;
+    public static ArrayList<Person> list_searched;
     private ArrayAdapter<Person> adapter_searched;
 
     @Override
@@ -50,7 +45,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Sear
         }
         adapter_searched = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list_searched);
         listview.setAdapter(adapter_searched);
-        isAfterSearch = true;
+        isSearching = true;
         return true;
     }
 
@@ -70,7 +65,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Sear
         buttonInsert.setOnClickListener(this);
         searchView.setOnQueryTextListener(this);
 
-        isAfterSearch = false;
+        isSearching = false;
 
         list = new ArrayList<>();
         list.add(new Person("Mary Adams", "01012345678"));
@@ -89,11 +84,23 @@ public class MainActivity extends Activity implements View.OnClickListener, Sear
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             //Toast.makeText(MainActivity.this, id +", "+position, Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putInt("pos",position);
-            intent.putExtras(bundle);
-            startActivityForResult(intent, REQUEST_DETAIL);
+            if(isSearching == true){
+                //todo 검색중인 리스트로 교체하기
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("pos",position);
+                bundle.putBoolean("isSearching", true);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, REQUEST_DETAIL);
+
+            }else{
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("pos",position);
+                bundle.putBoolean("isSearching", false);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, REQUEST_DETAIL);
+            }
         }
     }
 
@@ -115,9 +122,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Sear
 
     @Override
     public void onBackPressed() {
-        if (isAfterSearch == true) {
+        if (isSearching == true) {
             listview.setAdapter(adapter);
-            isAfterSearch = false;
+            isSearching = false;
         } else {
             super.onBackPressed();
         }
@@ -132,7 +139,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Sear
             String phoneStr = data.getStringExtra("phone");
             list.add(new Person(nameStr, phoneStr));
             adapter.notifyDataSetChanged();
-        } else if (requestCode == REQUEST_DETAIL && resultCode == 2220){
+        } else if ( requestCode == REQUEST_DETAIL && resultCode == RESULT_DETAIL ){
             adapter.notifyDataSetChanged();//데이터 변경됨을 알림.
             listview.invalidate();// 다시 그리기
         }

@@ -25,4 +25,6 @@ public class Person {
         return name;
     }
     //todo 임기응변같은데.. 해결책은?
+    //>>getView()를 오버라이드해서 사용
+    //http://stackoverflow.com/questions/2265661/how-to-use-arrayadaptermyclass
 }
